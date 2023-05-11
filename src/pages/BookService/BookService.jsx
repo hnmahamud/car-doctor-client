@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthProviders";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const BookService = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [service, setService] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:5000/services/${id}`)
@@ -53,6 +56,16 @@ const BookService = () => {
         console.log(data);
         if (data.insertedId) {
           console.log("Booking successfully!");
+          Swal.fire({
+            title: "Success!",
+            text: "Service booked successfully!",
+            icon: "success",
+            confirmButtonText: "Cool",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate("/bookings", { replace: true });
+            }
+          });
         }
       })
       .catch((error) => console.log(error));

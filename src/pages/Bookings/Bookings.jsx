@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthProviders";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import BookingRow from "./BookingRow";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const Bookings = () => {
   const { user } = useContext(AuthContext);
@@ -20,21 +22,38 @@ const Bookings = () => {
   }
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/bookings/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.deletedCount === 1) {
-          console.log("Successfully deleted one document.");
-          const remaining = bookingData.filter(
-            (singleData) => singleData._id !== id
-          );
-          setBookingData(remaining);
-        }
-      })
-      .catch((error) => console.log(error));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/bookings/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.deletedCount === 1) {
+              console.log("Successfully deleted one document.");
+              Swal.fire(
+                "Deleted!",
+                "Your booking has been deleted.",
+                "success"
+              );
+              const remaining = bookingData.filter(
+                (singleData) => singleData._id !== id
+              );
+              setBookingData(remaining);
+            }
+          })
+          .catch((error) => console.log(error));
+      }
+    });
   };
 
   const handleConfirm = (id) => {
@@ -66,6 +85,17 @@ const Bookings = () => {
           const newBookings = [...remaining];
           newBookings.splice(index, 0, updated);
           setBookingData(newBookings);
+
+          toast("Booking Confirmed!", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       })
       .catch((error) => console.log(error));

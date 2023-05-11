@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthProviders";
+import { FaSistrix, FaShoppingBag } from "react-icons/fa";
 
 const NavBar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -19,7 +20,6 @@ const NavBar = () => {
       <NavLink>Home</NavLink>
       <NavLink>About</NavLink>
       <NavLink>Service</NavLink>
-      <NavLink>Blog</NavLink>
       <NavLink>Contact</NavLink>
       {user ? (
         <>
@@ -65,7 +65,13 @@ const NavBar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 space-x-10">{navItems}</ul>
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end space-x-4">
+        <button>
+          <FaShoppingBag className="text-gray-500 h-4 w-4"></FaShoppingBag>
+        </button>
+        <button>
+          <FaSistrix className="text-gray-500 h-4 w-4"></FaSistrix>
+        </button>
         <button className="btn btn-outline btn-sm btn-error">
           Appointment
         </button>
