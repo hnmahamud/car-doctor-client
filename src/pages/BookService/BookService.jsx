@@ -1,10 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthProviders";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import HeroSection from "../Shared/HeroSection/HeroSection";
+import useScrollTop from "../../hooks/useScrollTop";
 
 const BookService = () => {
+  const { pathname } = useLocation();
+  useScrollTop(pathname);
+
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [service, setService] = useState();
@@ -72,83 +77,87 @@ const BookService = () => {
   };
 
   return (
-    <div className="bg-base-200">
-      <div className="text-center font-bold pt-12">
-        <p>Booking Service: {title}</p>
-        <p>Price: ${price}</p>
+    <>
+      <HeroSection pageName="Book Service"></HeroSection>
+
+      <div className="bg-base-200 rounded-md">
+        <div className="text-center font-bold pt-12">
+          <p>Booking Service: {title}</p>
+          <p>Price: ${price}</p>
+        </div>
+        <form onSubmit={handleBookService} className="bg-base-200 p-8 md:px-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <input
+                name="name"
+                type="text"
+                defaultValue={user && user.displayName}
+                placeholder="Name"
+                className="input input-bordered"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                name="email"
+                type="email"
+                defaultValue={user && user.email}
+                readOnly
+                placeholder="Email"
+                className="input input-bordered"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Phone</span>
+              </label>
+              <input
+                name="phone"
+                type="text"
+                placeholder="Your Phone"
+                required
+                className="input input-bordered"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Date</span>
+              </label>
+              <input
+                name="date"
+                type="date"
+                required
+                className="input input-bordered"
+              />
+            </div>
+          </div>
+          <div className="mt-2 md:mt-4">
+            <label className="label">
+              <span className="label-text">Message</span>
+            </label>
+            <textarea
+              name="message"
+              required
+              placeholder="Your Message"
+              className="textarea textarea-bordered textarea-md w-full h-36"
+            ></textarea>
+          </div>
+          <div className="form-control mt-2 md:mt4">
+            <button
+              type="submit"
+              className="bg-[#FF3811] btn btn-error text-white"
+            >
+              Confirm Order
+            </button>
+          </div>
+        </form>
       </div>
-      <form onSubmit={handleBookService} className="bg-base-200 p-8 md:px-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Name</span>
-            </label>
-            <input
-              name="name"
-              type="text"
-              defaultValue={user && user.displayName}
-              placeholder="Name"
-              className="input input-bordered"
-            />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <input
-              name="email"
-              type="email"
-              defaultValue={user && user.email}
-              readOnly
-              placeholder="Email"
-              className="input input-bordered"
-            />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Phone</span>
-            </label>
-            <input
-              name="phone"
-              type="text"
-              placeholder="Your Phone"
-              required
-              className="input input-bordered"
-            />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Date</span>
-            </label>
-            <input
-              name="date"
-              type="date"
-              required
-              className="input input-bordered"
-            />
-          </div>
-        </div>
-        <div className="mt-2 md:mt-4">
-          <label className="label">
-            <span className="label-text">Message</span>
-          </label>
-          <textarea
-            name="message"
-            required
-            placeholder="Your Message"
-            className="textarea textarea-bordered textarea-md w-full h-36"
-          ></textarea>
-        </div>
-        <div className="form-control mt-2 md:mt4">
-          <button
-            type="submit"
-            className="bg-[#FF3811] btn btn-error text-white"
-          >
-            Confirm Order
-          </button>
-        </div>
-      </form>
-    </div>
+    </>
   );
 };
 

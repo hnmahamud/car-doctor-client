@@ -4,6 +4,7 @@ import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import BookingRow from "./BookingRow";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import HeroSection from "../Shared/HeroSection/HeroSection";
 
 const Bookings = () => {
   const { user } = useContext(AuthContext);
@@ -102,30 +103,33 @@ const Bookings = () => {
   };
 
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Image</th>
-            <th>Service</th>
-            <th>Date</th>
-            <th>Price</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookingData.map((singleData) => (
-            <BookingRow
-              key={singleData._id}
-              singleData={singleData}
-              handleDelete={handleDelete}
-              handleConfirm={handleConfirm}
-            ></BookingRow>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <HeroSection pageName="All Bookings"></HeroSection>
+      <div className="overflow-x-auto w-full">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Image</th>
+              <th>Service</th>
+              <th>Date</th>
+              <th>Price</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookingData.map((singleData) => (
+              <BookingRow
+                key={singleData._id}
+                singleData={singleData}
+                handleDelete={handleDelete}
+                handleConfirm={handleConfirm}
+              ></BookingRow>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
