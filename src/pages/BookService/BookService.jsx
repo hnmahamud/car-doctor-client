@@ -1,12 +1,26 @@
-import React, { useContext } from "react";
-import { useLoaderData } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthProviders";
+import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 
 const BookService = () => {
-  const service = useLoaderData();
-  const { _id, title, price, img } = service;
-
   const { user } = useContext(AuthContext);
+  const { id } = useParams();
+  const [service, setService] = useState();
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/services/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setService(data);
+      });
+  }, []);
+
+  if (!service) {
+    return <LoadingSpinner fullScreen={false}></LoadingSpinner>;
+  }
+
+  // const service = useLoaderData();
+  const { _id, title, price, img } = service;
 
   const handleBookService = (event) => {
     event.preventDefault();

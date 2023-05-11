@@ -9,7 +9,7 @@ const Main = () => {
   const { fullLoading } = useContext(AuthContext);
 
   if (fullLoading) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return <LoadingSpinner fullScreen={true}></LoadingSpinner>;
   }
 
   return (

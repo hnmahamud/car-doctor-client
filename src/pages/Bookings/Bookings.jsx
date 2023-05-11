@@ -16,7 +16,7 @@ const Bookings = () => {
   }, []);
 
   if (!bookingData) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return <LoadingSpinner fullScreen={false}></LoadingSpinner>;
   }
 
   const handleDelete = (id) => {
