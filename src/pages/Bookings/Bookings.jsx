@@ -5,16 +5,31 @@ import BookingRow from "./BookingRow";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import HeroSection from "../Shared/HeroSection/HeroSection";
+import { useNavigate } from "react-router-dom";
 
 const Bookings = () => {
   const { user } = useContext(AuthContext);
   const [bookingData, setBookingData] = useState();
 
+  // Use navigate for navigate the unauthorized user to home page
+  const navigate = useNavigate();
+
   useEffect(() => {
-    fetch(`http://localhost:5000/bookings?email=${user?.email}`)
+    fetch(`http://localhost:5000/bookings?email=${user?.email}`, {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem(
+          "car-doctor-access-token"
+        )}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
-        setBookingData(data);
+        if (!data.error) {
+          setBookingData(data);
+        } else {
+          navigate("/", { replace: true });
+        }
       });
   }, []);
 

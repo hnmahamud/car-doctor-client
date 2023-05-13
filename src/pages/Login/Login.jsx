@@ -1,11 +1,17 @@
 import React, { useContext } from "react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImg from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../context/AuthProviders";
 
 const Login = () => {
+  // Use Context API
   const { loading, setLoading, loginUser } = useContext(AuthContext);
+
+  // Use Location for redirect target page or home page
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location?.state || "/";
 
   // Login with email password
   const handleLogin = (event) => {
@@ -18,12 +24,13 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         setLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage);
       });
   };
   return (
@@ -94,6 +101,7 @@ const Login = () => {
                 </span>
                 <Link
                   to="/register"
+                  state={from}
                   className="text-[#FF3811] font-semibold ml-2"
                 >
                   Sign Up

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImg from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../context/AuthProviders";
 
@@ -10,13 +10,13 @@ const photo =
 
 const Register = () => {
   // Context API
-  const {
-    loading,
-    setLoading,
-    setAuthStateHandler,
-    createUser,
-    profileUpdate,
-  } = useContext(AuthContext);
+  const { loading, setLoading, createUser, profileUpdate } =
+    useContext(AuthContext);
+
+  // Use Location for redirect target page or home page
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location?.state || "/";
 
   // Registration with email password
   const handleReg = (event) => {
@@ -36,8 +36,7 @@ const Register = () => {
         // Update user profile
         profileUpdate(name, photo)
           .then(() => {
-            setAuthStateHandler("reRun");
-            console.log(user);
+            navigate(from, { replace: true });
           })
           .catch((error) => {
             console.log(error);

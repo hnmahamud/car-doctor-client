@@ -1,7 +1,6 @@
 import React from "react";
 
 const BookingRow = ({ singleData, handleDelete, handleConfirm }) => {
-  console.log(singleData);
   const { _id, img, service, date, price, status } = singleData;
   return (
     <tr>

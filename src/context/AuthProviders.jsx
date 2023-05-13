@@ -20,7 +20,6 @@ const AuthProviders = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
   const [fullLoading, setFullLoading] = useState(true);
-  const [authStateHandler, setAuthStateHandler] = useState(true);
 
   // Registration
   const createUser = (email, password) => {
@@ -55,11 +54,31 @@ const AuthProviders = ({ children }) => {
       setLoading(false);
       setFullLoading(false);
 
+      if (currentUser && currentUser.email) {
+        const loggedUser = {
+          email: currentUser.email,
+        };
+        fetch("http://localhost:5000/jwt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loggedUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("car-doctor-access-token", data.token);
+          })
+          .catch((error) => console.log(error));
+      } else {
+        localStorage.removeItem("car-doctor-access-token");
+      }
+
       return () => {
         return unsubscribe();
       };
     });
-  }, [authStateHandler]);
+  }, []);
 
   // Data sent as context API
   const authInfo = {
@@ -67,8 +86,6 @@ const AuthProviders = ({ children }) => {
     setLoading,
     fullLoading,
     setFullLoading,
-    authStateHandler,
-    setAuthStateHandler,
     user,
     setUser,
     createUser,
