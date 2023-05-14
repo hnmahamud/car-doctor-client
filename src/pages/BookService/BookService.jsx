@@ -16,7 +16,7 @@ const BookService = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/services/${id}`)
+    fetch(`https://car-doctor-server-ten-sable.vercel.app/services/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setService(data);
@@ -49,7 +49,7 @@ const BookService = () => {
       message,
     };
 
-    fetch(`http://localhost:5000/bookings`, {
+    fetch(`https://car-doctor-server-ten-sable.vercel.app/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
